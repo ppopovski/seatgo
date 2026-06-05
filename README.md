@@ -1,56 +1,115 @@
-# Welcome to your Expo app 👋
+# SeatGo
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Unified urban transport app for Skopje — taxi, bus, and train in one map-centric experience.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run the app
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Then press `a` for Android, `i` for iOS simulator, or scan the QR code with Expo Go.
 
-### Other setup steps
+For native builds with maps:
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```bash
+npx expo run:android
+npx expo run:ios
+```
 
-## Learn more
+### Android maps API key (required for `expo run:android`)
 
-To learn more about developing your project with Expo, look at the following resources:
+Native Android builds use Google Maps and **require an API key**. Without it you will see a red error screen.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Create a key in [Google Cloud Console](https://console.cloud.google.com/) with **Maps SDK for Android** enabled.
+2. Copy `.env.example` to `.env` and set your key:
+   ```
+   EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=your_key_here
+   ```
+3. Rebuild the native app:
+   ```bash
+   npx expo prebuild --clean
+   npx expo run:android
+   ```
 
-## Join the community
+Until you add a key, the app shows a **map preview placeholder** on Android instead of crashing. Schedules, routing, tickets, and wallet still work.
 
-Join our community of developers creating universal apps.
+**Expo Go:** Press `a` after `npx expo start` — maps usually work without your own key.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Location permission is requested on first launch; if denied, the app defaults to central Skopje.
+
+## Demo flows
+
+### Guest mode
+
+1. Launch app → **Continue as guest**
+2. Home map shows nearby bus stops, train stations, and taxis
+3. Tap **Where to?** → pick a destination → view route options with ETA, time, and price
+4. Open Tickets / Wallet / try taxi confirm → **Sign in to continue** modal appears
+
+### Authenticated user
+
+1. **Continue with account** → sign in with any email/password
+2. Search destination → open route details → **Buy ticket** → QR ticket appears in Tickets tab
+3. Choose taxi route → **Call taxi** → confirm booking → driver assigned with map tracking
+4. Wallet → **Top up** → balance and transaction history update
+
+## What is mocked vs real
+
+| Feature | Status |
+|---------|--------|
+| Auth (email/password) | Mock — stored locally only |
+| Bus/train schedules | Mock — generated relative to current time |
+| Route planning | Mock — Skopje sample routes |
+| Taxi dispatch | Mock — simulated driver assignment |
+| Payments / top-up | Mock — no real charges |
+| Maps | Real map view; data is mocked |
+| Location | Real when permitted; Skopje fallback |
+
+## Project structure
+
+```
+src/
+  app/           Expo Router routes
+  features/      Feature screens & components
+  services/      Data access (swap for real APIs here)
+  stores/        Zustand state
+  data/mock/     Sample Skopje transit data
+  types/         Shared TypeScript types
+  components/ui/ Shared UI primitives
+```
+
+## Plugging in real APIs
+
+Replace mock implementations in:
+
+- [`src/services/transitService.ts`](src/services/transitService.ts) — live arrivals, stops, lines
+- [`src/services/routingService.ts`](src/services/routingService.ts) — multimodal routing engine
+- [`src/services/taxiService.ts`](src/services/taxiService.ts) — taxi ETA, pricing, booking
+- [`src/stores/authStore.ts`](src/stores/authStore.ts) — real authentication backend
+- [`src/stores/walletStore.ts`](src/stores/walletStore.ts) — payment provider (Stripe, etc.)
+
+For production Google Maps on Android/iOS, add API keys to `app.json`:
+
+```json
+["react-native-maps", {
+  "iosGoogleMapsApiKey": "YOUR_KEY",
+  "androidGoogleMapsApiKey": "YOUR_KEY"
+}]
+```
+
+Then rebuild with `npx expo prebuild` and `npx expo run:android` / `run:ios`.
+
+## Tech stack
+
+- Expo 56 + React Native + TypeScript
+- Expo Router (file-based navigation)
+- Zustand (state)
+- react-native-maps
+- @gorhom/bottom-sheet + Reanimated (motion)
+- react-native-qrcode-svg (ticket QR codes)
+
+## Design
+
+Black, white, and grayscale only. Design tokens live in [`src/constants/theme.ts`](src/constants/theme.ts).
