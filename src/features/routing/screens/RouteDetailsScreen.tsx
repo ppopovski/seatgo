@@ -1,11 +1,9 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { SeatGoMap, Polyline, PROVIDER_DEFAULT } from '@/components/ui/SeatGoMap';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { requireAuthOrShowModal, useAuthGate } from '@/components/providers/AuthGateProvider';
 import { RouteInputCard } from '@/components/ui/RouteInputCard';
-import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { SeatGoCard } from '@/components/ui/SeatGoCard';
 import { StickyBottomBar } from '@/components/ui/StickyBottomBar';
 import { ThemedText } from '@/components/themed-text';

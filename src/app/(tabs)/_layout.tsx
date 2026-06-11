@@ -2,7 +2,7 @@ import { Redirect, Tabs } from 'expo-router';
 import { Platform, useColorScheme } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { Colors, FontFamily, Shadows, Tokens } from '@/constants/theme';
+import { Colors, FontFamily, Shadows } from '@/constants/theme';
 import { useAuthStore } from '@/stores/authStore';
 
 export default function TabLayout() {
@@ -41,15 +41,6 @@ export default function TabLayout() {
           title: 'Home',
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons name={focused ? 'map' : 'map-outline'} size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="tickets"
-        options={{
-          title: 'Tickets',
-          tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons name={focused ? 'qr-code' : 'qr-code-outline'} size={size} color={color} />
           ),
         }}
       />

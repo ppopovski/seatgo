@@ -13,6 +13,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     scheme: 'seatgo',
     userInterfaceStyle: 'automatic',
     ios: {
+      bundleIdentifier: 'com.anonymous.SeatGo',
       icon: './assets/expo.icon',
       infoPlist: {
         NSLocationWhenInUseUsageDescription:

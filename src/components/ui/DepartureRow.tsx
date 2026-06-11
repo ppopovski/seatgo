@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { PrimaryButton } from '@/components/ui/PrimaryButton';
 import { ThemedText } from '@/components/themed-text';
@@ -15,7 +15,7 @@ type DepartureRowProps = {
 
 export function DepartureRow({ departure, lineNumber, onSelect }: DepartureRowProps) {
   const theme = useTheme();
-  const line = lineNumber ?? departure.lineNumber ?? '—';
+  const line = lineNumber ?? departure.lineNumber ?? '-';
 
   return (
     <View style={[styles.row, { borderBottomColor: theme.border }]}>
@@ -26,7 +26,7 @@ export function DepartureRow({ departure, lineNumber, onSelect }: DepartureRowPr
           </ThemedText>
         </View>
         <View style={styles.info}>
-          <ThemedText style={styles.dest}>→ {departure.destination}</ThemedText>
+          <ThemedText style={styles.dest}>To {departure.destination}</ThemedText>
           {departure.stopName ? (
             <ThemedText themeColor="textMuted" style={styles.stop}>
               {departure.stopName}

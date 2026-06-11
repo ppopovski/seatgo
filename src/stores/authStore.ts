@@ -65,8 +65,3 @@ export const useAuthStore = create<AuthState>()(
     },
   ),
 );
-
-export function canPerformAuthenticatedAction(): boolean {
-  const { isAuthenticated } = useAuthStore.getState();
-  return isAuthenticated;
-}

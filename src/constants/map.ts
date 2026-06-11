@@ -10,10 +10,3 @@ export const DEFAULT_REGION = {
   latitudeDelta: 0.06,
   longitudeDelta: 0.06,
 };
-
-export const MARKER_COLORS = {
-  bus: '#404040',
-  train: '#1A1A1A',
-  taxi: '#666666',
-  user: '#000000',
-};
